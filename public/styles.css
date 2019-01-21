@@ -1,0 +1,52 @@
+body {
+    font-family: Helvetica;
+}
+
+img {
+    height: 300px;
+    width: auto;
+}
+
+div {
+    margin: 10px;
+}
+
+h1 {
+    margin: 20px;
+    font-style: oblique;
+    color: red;
+}
+
+h2 {
+    margin-left: 10px;
+}
+
+.form p {
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.form input {
+    margin-right: 5px;
+    font-size: 16px;
+}
+
+button {
+    font-size: 16px;
+    display: block;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: 2px solid red;
+    padding: 5px;
+}
+
+.main p {
+    text-align: center;
+    margin-top: 5px;
+}
+
+.image-container {
+    display: inline-block;
+    border: 2px solid red;
+    padding: 5px;
+}

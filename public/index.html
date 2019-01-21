@@ -1,10 +1,35 @@
 <!doctype html>
 <html>
 <head>
-    <title></title>
+    <title>My Imageboard</title>
+    <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
+
+    <h1>CRIPPAGRAM</h1>
+
+    <div class="form">
+        <h2>Add your image!</h2>
+        <div class="input-fields">
+            <p>Title</p> <input type="text" name="" value="">
+            <p>Description</p> <input type="text" name="" value="">
+            <p>Username</p> <input type="text" name="" value="">
+        </div>
+        <div class="upload">
+            <input type="file" name="" value="">
+            <button type="button" name="button">Upload</button>
+        </div>
+    </div>
+
+    <div id="main">
+        <div class="image-container" v-if="images.length" v-for="image in images" >
+            <img :src="image.url" :alt="image.title">
+            <p>{{image.title}}</p>
+        </div>
+    </div>
+
     <script src="/js/vue.js"></script>
     <script src="/js/axios.min.js"></script>
+    <script src="/js/script.js"></script>
 </body>
 </html>
