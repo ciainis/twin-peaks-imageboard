@@ -55,7 +55,7 @@
                 results: []
             }
         },
-        props: ['imageID'],
+        props: ['imageID', 'newcomment'],
         mounted: function() {
             axios.post('/allcomments', {
                 imageID: this.imageID
