@@ -2,20 +2,90 @@
 <html>
 <head>
     <title>Image Board</title>
+    <link href="https://fonts.googleapis.com/css?family=Just+Me+Again+Down+Here" rel="stylesheet">
     <link rel="stylesheet" href="/styles/styles.css">
 </head>
 <body>
     <div id="main">
-        <div class="header__title">{{title}}</div>
-        <div class="container">
-                <div class="cards" v-if="results.length > 0">
-                    <div class="images__container" v-for="result in results">
-                        <img class="image":src="result.url"/>
-                        <p class="title">{{result.title}}</p>
-                    </div>
+
+        <imagemodal
+            v-if="currentImage.id"
+            :data="currentImage"
+            @close="closeModal"
+            >
+        </imagemodal>
+
+        <div class="header__title">{{pageTitle}}</div>
+
+        <div class="form">
+            <input class="input" type="text" name="title" placeholder="title" v-model="input.title" autocomplete="off" autofocus>
+            <input class="input" type="text" name="description" placeholder="description" v-model="input.description" autocomplete="off" >
+            <input class="input" type="text" name="username" placeholder="username" v-model="input.username" autocomplete="off" >
+            <input class="input" id="fileInput" type="file" accept="image/*">
+            <button class="btn" @click="upload">ADD IMAGE</button>
+        </div>   
+
+        <div class="cards__container">
+            <div class="cards" v-if="results.length > 0">
+                <div class="images__container" v-for="result in results">
+                    <img class="image" :src="result.url" @click="shownodal(result)"/>
+                    <p class="title">{{result.title}}</p>
                 </div>
+            </div>
         </div>
+
     </div>
+
+
+    <!-- SHOW COMMENTS TEMPLATE -->
+    <script id="showcomment__template" type="text/x-template">
+        <div class="comments__container">
+            <div class="comments" v-if="results.length > 0">
+                <div class="comment__box" v-for="result in results">
+                    <p class="comment__comment">{{result.comment}}</p>             
+                    <p class="comment__username"> commented by <b>{{result.username}}</b> on <em>{{result.created_at}}</em></p>   
+                </div>
+            </div>
+        </div>
+    </script>
+
+
+    <!-- ADD COMMENTS TEMPLATE -->
+    <script id="addcomments__template" type="text/x-template">
+        <div class="addcomments__container">
+            <p>Add a Comment:</p>
+            <div class="form__comment">
+                <input v-model="commentInput.username" class="comment__input" type="text" name="username" placeholder="username">
+                <input v-model="commentInput.comment" class="comment__input" type="text" name="comment" placeholder="comment">
+                <button class="btn" @click="submitComment">SUBMIT</button>
+            </div>
+            <showcomment
+                :imageID="id"
+                :results="comments"
+            >
+            </showcomment>
+        </div>
+    </script>
+
+
+    <!-- MODAL TEMPLATE -->
+    <script id="modal__template" type="text/x-template">
+        <div class="modal">
+            <div class="dark" @click="close"></div>
+            <div class="modal__container">
+                <img class="image__modal" :src="data.url"/>
+                <p class="title__modal">{{data.title}}</p>
+                <p class="description__modal">{{data.description}}</p>
+                <p class="username__modal"> Uploaded by <b>{{data.username}}</b> on <em>{{data.created_at}}</em></p>
+                <addcomments
+                    :id="data.id"
+                >
+                </addcomments>
+            </div>
+        </div>
+    </script>
+
+    
     <script src="/js/vue.js"></script>
     <script src="/js/axios.min.js"></script>
     <script src="/js/script.js"></script>
