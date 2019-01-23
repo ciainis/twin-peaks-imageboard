@@ -10,6 +10,7 @@
     </div>
 
     <div id="main">
+        <hello-diane v-on:closepopup="doclosepopup" v-if="imageid" :imageid="imageid"></hello-diane>
         <div class="form">
             <h2>Add your image!</h2>
 
@@ -27,14 +28,40 @@
 
         <div class="imageboard">
             <div class="image-container" v-if="images.length" v-for="image in images" >
-                <img :src="image.url" :alt="image.title">
+                <img :src="image.url" :alt="image.title" :id="image.id" @click="setImageId">
                 <p>{{image.description}}</p>
             </div>
         </div>
     </div>
 
+    <script id="popup" type="text/x-template">
+        <div id="popup">
+            <p id="close" @click="closePopUp">Close</p>
+            <img :src="image.url">
+            <h3>{{image.title}}</h3>
+            <p>{{image.description}}</p>
+            <p>{{image.username}}</p>
+
+            <div class="add-comments">
+                <h3>Add a comment!</h3>
+                <p>Comment</p> <input v-model="comment" type="text" name="comment">
+                <p>Username</p> <input v-model="username" type="text" name="username">
+                <button type="button" name="button" @click="submitComment">Submit</button>
+            </div>
+
+            <div class="comment-container" v-if="comments.length" v-for="comment in comments">
+                <p>Comment: "{{comment.comment}}"</p>
+                <p>By user: {{comment.username}}</p>
+                <p>{{comment.created_at}}</p>
+            </div>
+
+
+        </div>
+    </script>
+
     <script src="/js/vue.js"></script>
     <script src="/js/axios.min.js"></script>
     <script src="/js/script.js"></script>
+    <script src="/js/popup.js"></script>
 </body>
 </html>

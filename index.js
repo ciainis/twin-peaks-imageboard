@@ -4,6 +4,8 @@ const app = express();
 const s3 = require("./s3");
 const config = require("./config");
 
+const bodyParser = require("body-parser");
+
 var multer = require("multer");
 var uidSafe = require("uid-safe");
 var path = require("path");
@@ -28,6 +30,8 @@ var uploader = multer({
 
 const db = require("./db.js");
 
+app.use(bodyParser.json());
+
 app.use(express.static("./public"));
 
 app.get("/imageboard", (req, res) => {
@@ -50,6 +54,28 @@ app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
     )
         .then(({ rows }) => {
             res.json(rows[0]);
+        })
+        .catch(err => console.log(err));
+});
+
+app.get("/get-images/:imageid", (req, res) => {
+    db.getImage(req.params.imageid)
+        .then(response => {
+            res.json(response.rows);
+        })
+        .catch(err => console.log(err));
+});
+
+app.get("/get-comments/:imageid", (req, res) => {
+    db.getComments(req.params.imageid).then(response => {
+        res.json(response.rows);
+    });
+});
+
+app.post("/comment/add", (req, res) => {
+    db.addComment(req.body.username, req.body.comment, req.body.imageid)
+        .then(response => {
+            res.json(response.rows);
         })
         .catch(err => console.log(err));
 });

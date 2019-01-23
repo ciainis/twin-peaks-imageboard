@@ -3,13 +3,14 @@
         el: "#main",
         data: {
             images: [],
+            imageid: "",
             form: {
                 title: "",
                 description: "",
                 username: "",
                 file: null
             }
-        }, //end dats
+        }, //end data
         mounted: function() {
             var self = this;
             axios.get("/imageboard").then(function(response) {
@@ -40,7 +41,13 @@
                     .catch(function(err) {
                         console.log(err);
                     });
-            } //end uploadFile
+            }, //end uploadFile
+            setImageId: function(e) {
+                this.imageid = e.target.id;
+            },
+            doclosepopup: function() {
+                this.imageid = null;
+            }
         } //end methods
     }); //end vue
 })();
