@@ -34,8 +34,9 @@ app.use(bodyParser.json());
 
 app.use(express.static("./public"));
 
-app.get("/imageboard", (req, res) => {
+app.get("/images", (req, res) => {
     db.getImages().then(response => {
+        console.log(response.rows);
         res.json(response.rows);
     });
 });
@@ -64,18 +65,30 @@ app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
 app.get("/get-images/:imageid", (req, res) => {
     db.getImage(req.params.imageid)
         .then(response => {
-            var date = new Date(response.rows[0].created_at);
-            response.rows[0].created_at = date.toLocaleString();
+            // var date = new Date(response.rows[0].created_at);
+            // response.rows[0].created_at = date.toLocaleString();
             res.json(response.rows);
         })
         .catch(err => console.log(err));
 });
 
+app.get("/images/more/:imageid", (req, res) => {
+    db.getMoreImages(req.params.imageid)
+        .then(response => {
+            res.json(response.rows);
+        })
+        .catch(err => {
+            console.log("error: ", err);
+            res.status(500).send(err);
+        });
+});
+
 app.get("/get-comments/:imageid", (req, res) => {
     db.getComments(req.params.imageid)
         .then(response => {
-            var date = new Date(response.rows[0].created_at);
-            response.rows[0].created_at = date.toLocaleString();
+            // var date = new Date(response.rows[0].created_at);
+            // console.log(date);
+            // response.rows[0].created_at = date.toLocaleString();
             res.json(response.rows);
         })
         .catch(err => console.log(err));

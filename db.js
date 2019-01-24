@@ -4,7 +4,26 @@ const { dbUser, dbPass } = require("./secrets.json");
 const db = spicedPg(`postgres:${dbUser}:${dbPass}@localhost:5432/imageboard`);
 
 module.exports.getImages = function() {
-    return db.query("SELECT * FROM images ORDER BY id DESC");
+    return db.query(
+        `SELECT *, (
+	        SELECT id FROM images
+	        ORDER BY id ASC
+	        LIMIT 1) as lowest_id
+        FROM images
+        ORDER BY id
+        DESC LIMIT 9`
+    );
+};
+
+module.exports.getMoreImages = function(imageid) {
+    return db.query(
+        `SELECT *
+        FROM images
+        WHERE id < $1
+        ORDER BY id DESC
+        LIMIT 9`,
+        [imageid]
+    );
 };
 
 module.exports.addImage = function(url, username, title, description) {
@@ -42,3 +61,17 @@ module.exports.addComment = function(username, comment, imageid) {
         [username, comment, imageid]
     );
 };
+
+// module.exports.getMoreImages = function(imageid) {
+//     return db.query(
+//         `SELECT *, (
+// 	        SELECT id FROM images
+// 	        ORDER BY id ASC
+// 	        LIMIT 1) as lowest_id
+//         FROM images
+//         WHERE id < $1
+//         ORDER BY id DESC
+//         LIMIT 9`,
+//         [imageid]
+//     );
+// };

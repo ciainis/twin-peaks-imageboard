@@ -34,6 +34,8 @@
                 <p>{{image.description}}</p>
             </div>
         </div>
+            <button id="load-more" v-if="images.length && images[images.length -1].id > lowestid" @click="getMoreImages" type="button">Load more</button>
+
     </div>
 
     <script id="popup" type="text/x-template">

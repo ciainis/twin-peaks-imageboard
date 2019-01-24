@@ -4,6 +4,7 @@
         data: {
             images: [],
             imageid: "",
+            lowestid: null,
             form: {
                 title: "",
                 description: "",
@@ -14,9 +15,9 @@
         }, //end data
         mounted: function() {
             var self = this;
-            axios.get("/imageboard").then(function(response) {
-                // console.log(response);
+            axios.get("/images").then(function(response) {
                 self.images = response.data;
+                self.lowestid = response.data[0].lowest_id;
             });
         }, //end mounted
         methods: {
@@ -38,6 +39,7 @@
                     .post("/upload", formData)
                     .then(function(response) {
                         self.error = null;
+                        self.images.pop();
                         self.images.unshift(response.data);
                         self.form.title = null;
                         self.form.description = null;
@@ -53,6 +55,18 @@
             },
             doclosepopup: function() {
                 this.imageid = null;
+            },
+            getMoreImages: function() {
+                var self = this;
+                var lastId = this.images[this.images.length - 1].id;
+                axios
+                    .get("/images/more/" + lastId)
+                    .then(function(response) {
+                        self.images = self.images.concat(response.data);
+                    })
+                    .catch(function(err) {
+                        console.log(err);
+                    });
             }
         } //end methods
     }); //end vue
