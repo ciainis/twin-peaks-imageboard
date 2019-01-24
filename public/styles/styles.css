@@ -38,16 +38,19 @@ body, html {
 
 .cards__container {
     display: flex;
-    justify-content: center;
     height: 90vh;
     width: 100vw;
+    flex-flow: row wrap;
+
 }
 
 .cards {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
+
 }
+
 
 .images__container {
     display: flex;

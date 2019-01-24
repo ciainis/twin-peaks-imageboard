@@ -40,12 +40,6 @@
     <!-- SHOW COMMENTS TEMPLATE -->
     <script id="showcomment__template" type="text/x-template">
         <div class="comments__container">
-            <div class="comments" v-if="newcomment">
-                <div class="comment__box" v-for="comment in newcomment">
-                    <p class="comment__comment">{{comment.comment}}</p>             
-                    <p class="comment__username"> commented by <b>{{comment.username}}</b> on <em>{{comment.created_at}}</em></p>   
-                </div>
-            </div>
             <div class="comments" v-if="results.length > 0">
                 <div class="comment__box" v-for="result in results">
                     <p class="comment__comment">{{result.comment}}</p>             

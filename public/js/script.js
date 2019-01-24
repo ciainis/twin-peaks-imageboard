@@ -9,7 +9,7 @@
 
            } 
         },
-        props: ['data', ],
+        props: ['data'],
         methods: {
             close: function() {
                 this.$emit('close')
@@ -46,7 +46,7 @@
         }
     })
 
-    // SHOW COMMENT COMPONENT
+    // SHOW COMMENTS COMPONENT
 
     Vue.component('showcomment', {
         template:'#showcomment__template',
@@ -56,6 +56,11 @@
             }
         },
         props: ['imageID', 'newcomment'],
+        watch: {
+            newcomment: function(newval, oldval){
+                this.results.unshift(newval[0])
+            }
+        },
         mounted: function() {
             axios.post('/allcomments', {
                 imageID: this.imageID
@@ -64,9 +69,6 @@
                 console.log(res)
                 this.results = res.data.rows
             }.bind(this))
-        },
-        methods: {
-
         }
     })
 
