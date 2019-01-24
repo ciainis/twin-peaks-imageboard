@@ -18,7 +18,7 @@ module.exports.addImage = function(url, username, title, description) {
 
 module.exports.getImage = function(imageid) {
     return db.query(
-        `SELECT url, username, title, description
+        `SELECT url, username, title, description, created_at
         FROM images
         WHERE id = $1`,
         [imageid]
@@ -37,8 +37,8 @@ module.exports.getComments = function(imageid) {
 module.exports.addComment = function(username, comment, imageid) {
     return db.query(
         `INSERT INTO comments (username, comment, image_id)
-        VALUES ($1, $2, $3)
-        RETURNING *`,
+            VALUES ($1, $2, $3)
+            RETURNING *`,
         [username, comment, imageid]
     );
 };

@@ -9,7 +9,8 @@
                 description: "",
                 username: "",
                 file: null
-            }
+            },
+            error: ""
         }, //end data
         mounted: function() {
             var self = this;
@@ -21,7 +22,7 @@
         methods: {
             //every functions that i want to run in response to events
             uploadFile: function(e) {
-                e.preventDefault(); //to avoid the page to refresh as default behavior of a button
+                e.preventDefault();
                 var file = document.getElementById("file"); //get file object
                 var uploadedFile = file.files[0]; //access file
                 // now we want to send the file to the server (we use form data API, only for files)
@@ -36,10 +37,15 @@
                 axios
                     .post("/upload", formData)
                     .then(function(response) {
+                        self.error = null;
                         self.images.unshift(response.data);
+                        self.form.title = null;
+                        self.form.description = null;
+                        self.form.username = null;
                     })
                     .catch(function(err) {
                         console.log(err);
+                        self.error = "Error!";
                     });
             }, //end uploadFile
             setImageId: function(e) {

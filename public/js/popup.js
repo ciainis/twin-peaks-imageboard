@@ -5,7 +5,8 @@
                 image: [],
                 comment: "",
                 username: "",
-                comments: []
+                comments: [],
+                error: ""
             };
         },
         template: "#popup",
@@ -13,13 +14,14 @@
         mounted: function() {
             var self = this;
             axios.get("/get-images/" + this.imageid).then(function(response) {
+                console.log(response.data[0]);
                 self.image = response.data[0];
             });
             axios
                 .get("/get-comments/" + this.imageid)
                 .then(response => {
                     if (response.data.length) {
-                        console.log(response.data);
+                        //console.log(response.data);
                         self.comments = response.data;
                     } else {
                         return;
@@ -35,18 +37,24 @@
             },
             submitComment: function() {
                 var self = this;
-                axios
-                    .post("/comment/add", {
-                        imageid: self.imageid,
-                        comment: self.comment,
-                        username: self.username
-                    })
-                    .then(function(response) {
-                        self.comments.unshift(response.data[0]);
-                    })
-                    .catch(function(err) {
-                        console.log(err);
-                    });
+
+                if (self.comment != "" && self.username != "") {
+                    axios
+                        .post("/comment/add", {
+                            imageid: self.imageid,
+                            comment: self.comment,
+                            username: self.username
+                        })
+                        .then(function(response) {
+                            self.error = null;
+                            self.comments.unshift(response.data[0]);
+                        })
+                        .catch(function(err) {
+                            console.log(err);
+                        });
+                } else {
+                    self.error = "Something went wrong... Please try again!";
+                }
             }
         }
     });

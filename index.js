@@ -55,21 +55,30 @@ app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
         .then(({ rows }) => {
             res.json(rows[0]);
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            console.log(err);
+            res.status(500).send({ error: "Something failed!" });
+        });
 });
 
 app.get("/get-images/:imageid", (req, res) => {
     db.getImage(req.params.imageid)
         .then(response => {
+            var date = new Date(response.rows[0].created_at);
+            response.rows[0].created_at = date.toLocaleString();
             res.json(response.rows);
         })
         .catch(err => console.log(err));
 });
 
 app.get("/get-comments/:imageid", (req, res) => {
-    db.getComments(req.params.imageid).then(response => {
-        res.json(response.rows);
-    });
+    db.getComments(req.params.imageid)
+        .then(response => {
+            var date = new Date(response.rows[0].created_at);
+            response.rows[0].created_at = date.toLocaleString();
+            res.json(response.rows);
+        })
+        .catch(err => console.log(err));
 });
 
 app.post("/comment/add", (req, res) => {
@@ -77,7 +86,10 @@ app.post("/comment/add", (req, res) => {
         .then(response => {
             res.json(response.rows);
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            console.log(err);
+            res.status(500).send({ error: "Something failed!" });
+        });
 });
 
 app.listen(8080, () => console.log("listening!"));
