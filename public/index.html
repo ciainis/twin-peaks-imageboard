@@ -24,7 +24,7 @@
 
             <div class="upload">
                 <input id="file" type="file" accept="image/*">
-                <button @click="uploadFile" type="button" name="button">Upload</button>
+                <button @click="uploadFile" type="button" name="button">UPLOAD</button>
             </div>
         </div>
 
@@ -34,7 +34,7 @@
                 <p>{{image.description}}</p>
             </div>
         </div>
-            <button id="load-more" v-if="images.length && images[images.length -1].id > lowestid" @click="getMoreImages" type="button">Load more</button>
+            <button id="load-more" v-if="images.length && images[images.length - 1].id > lowestid" @click="getMoreImages" type="button">LOAD MORE</button>
 
     </div>
 
@@ -52,7 +52,7 @@
                 <h3>Add a comment!</h3>
                 <p>Comment</p> <input v-model="comment" type="text" name="comment">
                 <p>Username</p> <input v-model="username" type="text" name="username">
-                <button type="button" name="button" @click="submitComment">Submit</button>
+                <button type="button" name="button" @click="submitComment">SUBMIT</button>
             </div>
 
             <p>{{error}}</p>

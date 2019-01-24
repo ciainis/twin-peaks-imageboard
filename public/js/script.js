@@ -16,8 +16,12 @@
         mounted: function() {
             var self = this;
             axios.get("/images").then(function(response) {
-                self.images = response.data;
-                self.lowestid = response.data[0].lowest_id;
+                if (response.data.length) {
+                    self.images = response.data;
+                    self.lowestid = response.data[0].lowest_id;
+                } else {
+                    return;
+                }
             });
         }, //end mounted
         methods: {
@@ -39,8 +43,10 @@
                     .post("/upload", formData)
                     .then(function(response) {
                         self.error = null;
-                        self.images.pop();
                         self.images.unshift(response.data);
+                        if (self.images.length > 9) {
+                            self.images = self.images.slice(0, 9);
+                        }
                         self.form.title = null;
                         self.form.description = null;
                         self.form.username = null;

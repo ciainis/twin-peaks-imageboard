@@ -48,7 +48,8 @@ module.exports.getComments = function(imageid) {
     return db.query(
         `SELECT username, comment, created_at
         FROM comments
-        WHERE image_id = $1`,
+        WHERE image_id = $1
+        ORDER BY id DESC`,
         [imageid]
     );
 };
@@ -61,17 +62,3 @@ module.exports.addComment = function(username, comment, imageid) {
         [username, comment, imageid]
     );
 };
-
-// module.exports.getMoreImages = function(imageid) {
-//     return db.query(
-//         `SELECT *, (
-// 	        SELECT id FROM images
-// 	        ORDER BY id ASC
-// 	        LIMIT 1) as lowest_id
-//         FROM images
-//         WHERE id < $1
-//         ORDER BY id DESC
-//         LIMIT 9`,
-//         [imageid]
-//     );
-// };

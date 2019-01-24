@@ -36,7 +36,6 @@ app.use(express.static("./public"));
 
 app.get("/images", (req, res) => {
     db.getImages().then(response => {
-        console.log(response.rows);
         res.json(response.rows);
     });
 });
@@ -65,8 +64,9 @@ app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
 app.get("/get-images/:imageid", (req, res) => {
     db.getImage(req.params.imageid)
         .then(response => {
-            // var date = new Date(response.rows[0].created_at);
-            // response.rows[0].created_at = date.toLocaleString();
+            response.rows[0].created_at = new Date(
+                response.rows[0].created_at
+            ).toLocaleString();
             res.json(response.rows);
         })
         .catch(err => console.log(err));
@@ -86,9 +86,11 @@ app.get("/images/more/:imageid", (req, res) => {
 app.get("/get-comments/:imageid", (req, res) => {
     db.getComments(req.params.imageid)
         .then(response => {
-            // var date = new Date(response.rows[0].created_at);
-            // console.log(date);
-            // response.rows[0].created_at = date.toLocaleString();
+            for (var i = 0; i < response.rows.length; i++) {
+                response.rows[i].created_at = new Date(
+                    response.rows[i].created_at
+                ).toLocaleString();
+            }
             res.json(response.rows);
         })
         .catch(err => console.log(err));
@@ -97,6 +99,9 @@ app.get("/get-comments/:imageid", (req, res) => {
 app.post("/comment/add", (req, res) => {
     db.addComment(req.body.username, req.body.comment, req.body.imageid)
         .then(response => {
+            response.rows[0].created_at = new Date(
+                response.rows[0].created_at
+            ).toLocaleString();
             res.json(response.rows);
         })
         .catch(err => {
