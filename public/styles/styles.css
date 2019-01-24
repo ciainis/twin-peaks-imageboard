@@ -7,7 +7,7 @@
 }
 
 body, html {
-    font-family: arial;
+    font-family: 'Quicksand', sans-serif;
     font-size: 62.5%;
 }
 
@@ -27,28 +27,68 @@ body, html {
 
 .form {
     display: flex;
-    flex-direction: column;
     align-self: center;
     margin-bottom: 40px 20px;
 }
 
-.input {
+.input{
     margin: 0 20px;
+    height: 30px;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid #000;
+}
+
+.input:focus {
+    border-bottom: 1px solid rgb(206, 193, 21);
+}
+
+.input__file {
+    width: 1px;
+    visibility: hidden;
+}
+
+#input__file__fake {
+    align-self: flex-end;
+    height: 20px;
+    margin: 1px 20px;
+    font-family: 'Quicksand';
+    font-size: 1.1rem;
+    width: 150px;
+    color: rgb(128, 128, 128);
+    border-bottom: 1px solid #000;
+    cursor: pointer;
+}
+
+#input__file__fake:hover {
+    border-bottom: 1px solid rgb(206, 193, 21);
+    color: rgb(206, 193, 21);
+}
+
+.btn {
+    align-self: center;
+    margin: 0 20px;
+    width: 80px;
+    height: 30px;
+    background-color: rgb(26, 26, 26);
+    outline: none;
+    font-family: inherit;
+    font-size: 1.4rem;
+    color: white;
+    cursor: pointer;
 }
 
 .cards__container {
     display: flex;
+    justify-content: center;
     height: 90vh;
     width: 100vw;
-    flex-flow: row wrap;
-
 }
 
 .cards {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-
 }
 
 
@@ -94,8 +134,8 @@ body, html {
     left: 0;
     background-color: black;
     opacity: .7;
-    height: 100%;
-    width: 100%;
+    height: 100vh;
+    width: 100vw;
     z-index: 100;
 }
 
@@ -103,32 +143,41 @@ body, html {
     height: 90vh;
     width: 90vw;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
-    align-items: center;
     align-self: center;
     background-color: #fff;
     z-index: 200;
 }
 
+.image__info {
+    display: flex;
+    flex-direction: column;
+    width: 55vw;
+    height: 90vh;
+}
+
 .image__modal {
-    display: block;
-    max-width: 80vw;
-    max-height: 60vh;
-    width: auto;
-    height: auto;
+    max-height: 70vh;
+    width: 55vw;
+    object-fit: contain;
 }
 
 .title__modal {
+    text-align: center;
     font-size: 3rem;
+    margin: 20px;
 }
 
 .description__modal {
-    font-size: 2.4rem;
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
 }
 
 .username__modal {
-    font-size: 1.8rem;
+    text-align: center;
+    font-size: 1.4rem;
 }
 
 
@@ -137,17 +186,62 @@ body, html {
 .addcomments__container {
     display: flex;
     flex-direction: column;
+    justify-content: space-evenly;
     align-self: flex-start;
-    margin-top: 20px;
+    width: 35vw;
+    height: 85vh;
+    margin: 20px 40px;
 }
 
 .form__comment {
     display: flex;
-    margin-top: 20px;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    height: 8vh;
+    margin: 10px 10px;
 }
 
 .comment__input {
-    height: 20px;
-    width: 200px;
-    margin: 0 20px;
+    height: 30px;
+    width: 100px;
+    margin: 5px 5px;
+}
+
+.comments__container {
+    height: 65%;
+    overflow: scroll;
+}
+
+.comment__btn {
+    width: 60px;
+    margin: 5px 5px;
+    height: 30px;
+    background-color: rgb(26, 26, 26);
+    outline: none;
+    font-family: inherit;
+    font-size: 1.4rem;
+    color: white;
+    cursor: pointer;
+}
+
+.title__comment {
+    text-align: center;
+    margin-left: 20px;
+}
+
+.comment__box {
+    margin: 5px;
+}
+
+.comment__username {
+    padding: 5px;
+}
+
+.comment__comment {
+    padding: 5px;
+}
+
+.comment__date {
+    padding: 5px;
+    font-size: 1rem
 }

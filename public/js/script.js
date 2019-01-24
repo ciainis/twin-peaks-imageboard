@@ -66,7 +66,9 @@
                 imageID: this.imageID
             })
             .then(function(res) {
-                console.log(res)
+                res.data.rows.forEach(function(row, index) {
+                    res.data.rows[index].created_at = moment(row.created_at).format('llll')
+                })
                 this.results = res.data.rows
             }.bind(this))
         }
@@ -90,6 +92,11 @@
         mounted: function() {
             axios.get('/images')
                 .then(function(res) {
+                    res.data.rows.forEach(function(row, index) {
+                        res.data.rows[index].created_at = moment(row.created_at).format('llll')
+                        // res.data.rows[index].created_at = new Date(row.created_at.replace(' ', 'T'))
+                        console.log(res.data.rows[index].created_at)
+                    })
                     this.results = res.data.rows
                 }.bind(this))
         },

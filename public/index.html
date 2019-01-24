@@ -3,6 +3,7 @@
 <head>
     <title>Image Board</title>
     <link href="https://fonts.googleapis.com/css?family=Just+Me+Again+Down+Here" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
     <link rel="stylesheet" href="/styles/styles.css">
 </head>
 <body>
@@ -18,10 +19,11 @@
         <div class="header__title">{{pageTitle}}</div>
 
         <div class="form">
-            <input class="input" type="text" name="title" placeholder="title" v-model="input.title" autocomplete="off" autofocus>
+            <input class="input" type="text" name="title" placeholder="title" v-model="input.title" autocomplete="off">
             <input class="input" type="text" name="description" placeholder="description" v-model="input.description" autocomplete="off" >
             <input class="input" type="text" name="username" placeholder="username" v-model="input.username" autocomplete="off" >
-            <input class="input" id="fileInput" type="file" accept="image/*">
+            <input class="input__file" id="fileInput" name="file" type="file" accept="image/*">
+            <span title="attach file" id="input__file__fake">choose a file</span>            
             <button class="btn" @click="upload">ADD IMAGE</button>
         </div>   
 
@@ -42,8 +44,9 @@
         <div class="comments__container">
             <div class="comments" v-if="results.length > 0">
                 <div class="comment__box" v-for="result in results">
-                    <p class="comment__comment">{{result.comment}}</p>             
-                    <p class="comment__username"> commented by <b>{{result.username}}</b> on <em>{{result.created_at}}</em></p>   
+                    <p class="comment__username"><b>{{result.username}}</b> said :</p>
+                    <p class="comment__comment">"{{result.comment}}"</p> 
+                    <p class="comment__date"><em>{{result.created_at}}</em></p>                 
                 </div>
             </div>
         </div>
@@ -53,11 +56,11 @@
     <!-- ADD COMMENTS TEMPLATE -->
     <script id="addcomments__template" type="text/x-template">
         <div class="addcomments__container">
-            <p>Add a Comment:</p>
+            <p class="title__comment">COMMENTS</p>
             <div class="form__comment">
-                <input v-model="commentInput.username" class="comment__input" type="text" name="username" placeholder="username">
-                <input v-model="commentInput.comment" class="comment__input" type="text" name="comment" placeholder="comment">
-                <button class="btn" @click="submitComment">SUBMIT</button>
+                <input v-model="commentInput.username" class="comment__input" type="text" name="username" placeholder="username" autocomplete="off">
+                <input v-model="commentInput.comment" class="comment__input" type="text" name="comment" placeholder="comment" autocomplete="off">
+                <button class="comment__btn" @click="submitComment">SUBMIT</button>
             </div>
             <showcomment
                 :imageID="id"
@@ -73,10 +76,12 @@
         <div class="modal">
             <div class="dark" @click="close"></div>
             <div class="modal__container">
-                <img class="image__modal" :src="data.url"/>
-                <p class="title__modal">{{data.title}}</p>
-                <p class="description__modal">{{data.description}}</p>
-                <p class="username__modal"> Uploaded by <b>{{data.username}}</b> on <em>{{data.created_at}}</em></p>
+                <div class="image__info">
+                    <img class="image__modal" :src="data.url"/>
+                    <p class="title__modal">{{data.title}}</p>
+                    <p class="description__modal"><em>{{data.description}}</em></p>
+                    <p class="username__modal"> Uploaded by <b>{{data.username}}</b> on <em>{{data.created_at}}</em></p>
+                </div>
                 <addcomments
                     :id="data.id"
                 >
@@ -88,6 +93,25 @@
     
     <script src="/js/vue.js"></script>
     <script src="/js/axios.min.js"></script>
+    <script src="/js/moment.js"></script>
     <script src="/js/script.js"></script>
+    <script>
+        var input = document.getElementById('fileInput')
+        var fakeInput = document.getElementById('input__file__fake')
+
+        fakeInput.addEventListener('click', function(){
+            input.click()
+        })
+
+        input.addEventListener('change', function() {
+            var file = input.value.split("\\")
+            var fileName = file[file.length-1]
+            if (fileName.length > 0) {
+                fakeInput.innerHTML = fileName 
+            } else if (fileName === "") {
+                fakeInput.innerHTML = 'choose a file'
+            }  
+        })
+    </script>
 </body>
 </html>
