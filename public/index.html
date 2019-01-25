@@ -10,7 +10,9 @@
     </div>
 
     <div id="main">
+
         <hello-diane v-on:closepopup="doclosepopup" v-if="imageid" :imageid="imageid"></hello-diane>
+
         <div class="form">
             <h2>Add your image!</h2>
 
@@ -29,12 +31,14 @@
         </div>
 
         <div class="imageboard">
-            <div class="image-container" v-if="images.length" v-for="image in images" >
-                <img :src="image.url" :alt="image.title" :id="image.id" @click="setImageId">
+            <a v-if="images.length" v-for="image in images" :href="'#' + image.id" class="image-container" >
+                <img :src="image.url" :alt="image.title">
                 <p>{{image.description}}</p>
-            </div>
+            </a>
         </div>
-            <button id="load-more" v-if="images.length && images[images.length - 1].id > lowestid" @click="getMoreImages" type="button">LOAD MORE</button>
+
+
+        <button id="load-more" v-if="images.length && images[images.length - 1].id > lowestid" @click="getMoreImages" type="button">LOAD MORE</button>
 
     </div>
 

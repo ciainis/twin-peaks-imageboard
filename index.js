@@ -69,7 +69,10 @@ app.get("/get-images/:imageid", (req, res) => {
             ).toLocaleString();
             res.json(response.rows);
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+            console.log(err);
+            res.status(500).send(err);
+        });
 });
 
 app.get("/images/more/:imageid", (req, res) => {

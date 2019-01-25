@@ -23,6 +23,9 @@
                     return;
                 }
             });
+            window.addEventListener("hashchange", function() {
+                self.imageid = location.hash.slice(1);
+            });
         }, //end mounted
         methods: {
             //every functions that i want to run in response to events
