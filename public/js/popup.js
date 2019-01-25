@@ -3,6 +3,8 @@
         data: function() {
             return {
                 image: [],
+                previousid: null,
+                nextid: null,
                 comment: "",
                 username: "",
                 comments: [],
@@ -12,10 +14,13 @@
         template: "#popup",
         props: ["imageid"],
         mounted: function() {
+            console.log("mounted running!");
             var self = this;
             axios
                 .get("/get-images/" + this.imageid)
                 .then(function(response) {
+                    self.previousid = response.data[0].previous_id;
+                    self.nextid = response.data[0].next_id;
                     self.image = response.data[0];
                 })
                 .catch(function(err) {
@@ -88,6 +93,34 @@
                 } else {
                     self.error = "Something went wrong... Please try again!";
                 }
+            },
+            getpreviousimage: function() {
+                var self = this;
+                axios
+                    .get("/images/prev/" + self.previousid)
+                    .then(function(response) {
+                        self.previousid = response.data.image[0].previous_id;
+                        self.nextid = response.data.image[0].next_id;
+                        self.image = response.data.image[0];
+                        self.comments = response.data.comments;
+                    })
+                    .catch(function(err) {
+                        console.log(err);
+                    });
+            },
+            getnextimage: function() {
+                var self = this;
+                axios
+                    .get("/images/next/" + self.nextid)
+                    .then(function(response) {
+                        self.previousid = response.data.image[0].previous_id;
+                        self.nextid = response.data.image[0].next_id;
+                        self.image = response.data.image[0];
+                        self.comments = response.data.comments;
+                    })
+                    .catch(function(err) {
+                        console.log(err);
+                    });
             }
         }
     });

@@ -125,7 +125,7 @@ button {
 
 .comment-container {
     background: red;
-    width: 50%;
+    width: 70%;
     margin: auto;
     padding-bottom: 3px;
     border: 2px solid white;
@@ -134,4 +134,14 @@ button {
 .uploaded-by {
     font-style: italic;
     font-size: 12px;
+}
+
+.button {
+    display: inline-block;
+}
+
+.card {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }

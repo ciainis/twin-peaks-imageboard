@@ -3,7 +3,7 @@
         el: "#main",
         data: {
             images: [],
-            imageid: "",
+            imageid: location.hash.slice(1),
             lowestid: null,
             form: {
                 title: "",
@@ -14,6 +14,8 @@
             error: ""
         }, //end data
         mounted: function() {
+            console.log("main mounted running!");
+            console.log(this.imageid);
             var self = this;
             axios.get("/images").then(function(response) {
                 if (response.data.length) {

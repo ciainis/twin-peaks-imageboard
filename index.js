@@ -113,4 +113,32 @@ app.post("/comment/add", (req, res) => {
         });
 });
 
+app.get("/images/prev/:imageid", (req, res) => {
+    Promise.all([
+        db.getImage(req.params.imageid),
+        db.getComments(req.params.imageid)
+    ])
+        .then(response => {
+            res.json({
+                image: response[0].rows,
+                comments: response[1].rows
+            });
+        })
+        .catch(err => console.log(err));
+});
+
+app.get("/images/next/:imageid", (req, res) => {
+    Promise.all([
+        db.getImage(req.params.imageid),
+        db.getComments(req.params.imageid)
+    ])
+        .then(response => {
+            res.json({
+                image: response[0].rows,
+                comments: response[1].rows
+            });
+        })
+        .catch(err => console.log(err));
+});
+
 app.listen(8080, () => console.log("listening!"));

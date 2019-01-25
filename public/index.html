@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-    <title>My Imageboard</title>
+    <title>Twin Peaks Imageboard</title>
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
@@ -46,7 +46,11 @@
         <div id="popup">
             <p id="close" @click="closePopUp">Back to board</p>
             <div id="popup-result">
-                <img :src="image.url">
+                <div class="card">
+                    <button v-if="previousid != null" @click="getpreviousimage">PREV</button>
+                    <img :src="image.url">
+                    <button v-if="nextid != null" @click="getnextimage">NEXT</button>
+                </div>
                 <h3>{{image.title}}</h3>
                 <p>{{image.description}}</p>
                 <p class="uploaded-by">Uploaded by: {{image.username}} on {{image.created_at}}</p>
@@ -71,7 +75,7 @@
 
     <script src="/js/vue.js"></script>
     <script src="/js/axios.min.js"></script>
-    <script src="/js/script.js"></script>
     <script src="/js/popup.js"></script>
+    <script src="/js/script.js"></script>
 </body>
 </html>
