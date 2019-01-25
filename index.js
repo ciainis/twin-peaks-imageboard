@@ -63,7 +63,7 @@ app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
         });
 });
 
-app.get("/get-images/:imageid", (req, res) => {
+app.get("/get-image/:imageid", (req, res) => {
     db.getImage(req.params.imageid)
         .then(response => {
             response.rows[0].created_at = modules.niceDate(
@@ -113,54 +113,6 @@ app.post("/comment/add", (req, res) => {
             console.log(err);
             res.status(500).send({ error: "Something failed!" });
         });
-});
-
-app.get("/images/prev/:imageid", (req, res) => {
-    Promise.all([
-        db.getImage(req.params.imageid),
-        db.getComments(req.params.imageid)
-    ])
-        .then(response => {
-            for (var i = 0; i < response[0].rows.length; i++) {
-                response[0].rows[i].created_at = modules.niceDate(
-                    response[0].rows[i].created_at
-                );
-            }
-            for (i = 0; i < response[1].rows.length; i++) {
-                response[1].rows[i].created_at = modules.niceDate(
-                    response[1].rows[i].created_at
-                );
-            }
-            res.json({
-                image: response[0].rows,
-                comments: response[1].rows
-            });
-        })
-        .catch(err => console.log(err));
-});
-
-app.get("/images/next/:imageid", (req, res) => {
-    Promise.all([
-        db.getImage(req.params.imageid),
-        db.getComments(req.params.imageid)
-    ])
-        .then(response => {
-            for (var i = 0; i < response[0].rows.length; i++) {
-                response[0].rows[i].created_at = modules.niceDate(
-                    response[0].rows[i].created_at
-                );
-            }
-            for (i = 0; i < response[1].rows.length; i++) {
-                response[1].rows[i].created_at = modules.niceDate(
-                    response[1].rows[i].created_at
-                );
-            }
-            res.json({
-                image: response[0].rows,
-                comments: response[1].rows
-            });
-        })
-        .catch(err => console.log(err));
 });
 
 app.listen(8080, () => console.log("listening!"));

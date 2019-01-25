@@ -17,7 +17,7 @@
             console.log("mounted running!");
             var self = this;
             axios
-                .get("/get-images/" + this.imageid)
+                .get("/get-image/" + this.imageid)
                 .then(function(response) {
                     self.previousid = response.data[0].previous_id;
                     self.nextid = response.data[0].next_id;
@@ -44,9 +44,10 @@
             imageid: function() {
                 var self = this;
                 axios
-                    .get("/get-images/" + this.imageid)
+                    .get("/get-image/" + this.imageid)
                     .then(function(response) {
-                        console.log("getting watch response");
+                        self.previousid = response.data[0].previous_id;
+                        self.nextid = response.data[0].next_id;
                         self.image = response.data[0];
                     })
                     .catch(function(err) {
@@ -95,34 +96,12 @@
                 }
             },
             getpreviousimage: function() {
+                this.comments = [];
                 location.hash = this.nextid;
-                var self = this;
-                axios
-                    .get("/images/prev/" + self.nextid)
-                    .then(function(response) {
-                        self.previousid = response.data.image[0].previous_id;
-                        self.nextid = response.data.image[0].next_id;
-                        self.image = response.data.image[0];
-                        self.comments = response.data.comments;
-                    })
-                    .catch(function(err) {
-                        console.log(err);
-                    });
             },
             getnextimage: function() {
+                this.comments = [];
                 location.hash = this.previousid;
-                var self = this;
-                axios
-                    .get("/images/next/" + self.previousid)
-                    .then(function(response) {
-                        self.previousid = response.data.image[0].previous_id;
-                        self.nextid = response.data.image[0].next_id;
-                        self.image = response.data.image[0];
-                        self.comments = response.data.comments;
-                    })
-                    .catch(function(err) {
-                        console.log(err);
-                    });
             }
         }
     });
