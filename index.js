@@ -5,7 +5,7 @@ const uidSafe = require('uid-safe')
 const path = require('path')
 
 const {s3Url} = require('./config') 
-const {getImages, addImage, getComments, addComment} = require('./db')
+const {getImages, getImage, addImage, getMoreImages, isLastImage, getComments, addComment} = require('./db')
 const {upload} = require('./s3')
 
 const app = express()
@@ -45,6 +45,36 @@ app.get('/images', (req, res) => {
         .catch(err => {
             console.log(err.message)
         })     
+})
+
+app.post('/image', (req, res) => {
+    getImage(req.body.id)
+        .then( data => {
+            res.json(data)
+        })
+        .catch(err => {
+            console.log(err.message)
+        })     
+})
+
+app.get('/lastimage', (req, res) => {
+    isLastImage()
+        .then(id => {
+            res.json(id)
+        })
+        .catch(err => {
+            console.log(err.message)
+        })
+})
+
+app.post('/moreimages', (req, res) => {
+    getMoreImages(req.body.lastID)
+        .then( data => {
+            res.json(data)
+        })
+        .catch(err => {
+            console.log(err.message)
+        })
 })
 
 app.post('/upload', uploader.single('file'), upload, (req, res) => {

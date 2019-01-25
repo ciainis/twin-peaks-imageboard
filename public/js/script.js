@@ -13,6 +13,12 @@
         methods: {
             close: function() {
                 this.$emit('close')
+            },
+            nextImage: function() {
+                location.hash = this.data.next
+            },
+            prevImage: function() {
+                location.hash = this.data.prev
             }
         }
     })
@@ -57,8 +63,19 @@
         },
         props: ['imageID', 'newcomment'],
         watch: {
-            newcomment: function(newval, oldval){
+            newcomment: function(newval, oldval) {
                 this.results.unshift(newval[0])
+            },
+            imageID: function(newVal, oldVal) {
+                axios.post('/allcomments', {
+                    imageID: this.imageID
+                })
+                .then(function(res) {
+                    res.data.rows.forEach(function(row, index) {
+                        res.data.rows[index].created_at = moment(row.created_at).format('llll')
+                    })
+                    this.results = res.data.rows
+                }.bind(this))
             }
         },
         mounted: function() {
@@ -79,26 +96,53 @@
     new Vue({
         el: '#main',
         data: {
-            pageTitle: '$€£ [#]**!?',
+            pageTitle: '$€£ *[#]*!?',
             results : [],
+            lastImageID: '',
+            showButton: true,
             input: {
                 title: '',
                 description: '',
                 username: '',
                 file: null
             },
-            currentImage: {}
+            currentImage: {},
+            currentID: ''
         },
         mounted: function() {
+            
             axios.get('/images')
                 .then(function(res) {
                     res.data.rows.forEach(function(row, index) {
                         res.data.rows[index].created_at = moment(row.created_at).format('llll')
-                        // res.data.rows[index].created_at = new Date(row.created_at.replace(' ', 'T'))
-                        console.log(res.data.rows[index].created_at)
                     })
                     this.results = res.data.rows
                 }.bind(this))
+
+            if (location.hash) {
+                axios.post('/image', {
+                    id: location.hash.slice(1)
+                })
+                .then(function(res) {
+                    res.data.rows.forEach(function(row, index) {
+                        res.data.rows[index].created_at = moment(row.created_at).format('llll')
+                    })
+                    this.currentImage = res.data.rows[0]
+                }.bind(this))
+            }
+            this.$nextTick(function() {
+                window.addEventListener('hashchange', function(){
+                    axios.post('/image', {
+                        id: location.hash.slice(1)
+                    })
+                    .then(function(res) {
+                        res.data.rows.forEach(function(row, index) {
+                            res.data.rows[index].created_at = moment(row.created_at).format('llll')
+                        })
+                        this.currentImage = res.data.rows[0]
+                    }.bind(this))
+                }.bind(this))
+            })
         },
         methods: {
             upload: function(e) {
@@ -114,12 +158,37 @@
                         this.results.unshift(res.data.rows[0]) 
                     }.bind(this))
             },
-            shownodal: function(data) {
+            loadMore: function() {
+                axios.post('/moreimages', {
+                    lastID: this.results[this.results.length - 1].id
+                })
+                .then(function(res) {
+                    res.data.rows.forEach(function(row, index) {
+                        res.data.rows[index].created_at = moment(row.created_at).format('llll')
+                    })
+                    this.results = this.results.concat(res.data.rows)
+                }.bind(this))
+            },
+            showModal: function(data) {
                 this.currentImage = data
+                console.log(this.currentImage.prev)
+                location.hash = `#${this.currentImage.id}`
             },
             closeModal: function() {
                 this.currentImage = {}
+                location.hash = ''
             }
-        }    
+        }, 
+        watch: {
+            results: function(newVal, oldVal) {
+                axios.get('/lastimage')
+                    .then(res => {
+                        this.lastImageID = res.data.rows[0].id
+                    })
+                if (this.lastImageID === this.results[this.results.length - 1].id) {
+                    this.showButton = false
+                }
+            }
+        }   
     })
 })()
