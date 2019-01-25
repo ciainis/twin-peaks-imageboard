@@ -6,6 +6,8 @@ const config = require("./config");
 
 const bodyParser = require("body-parser");
 
+const modules = require("./modules");
+
 var multer = require("multer");
 var uidSafe = require("uid-safe");
 var path = require("path");
@@ -64,9 +66,9 @@ app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
 app.get("/get-images/:imageid", (req, res) => {
     db.getImage(req.params.imageid)
         .then(response => {
-            response.rows[0].created_at = new Date(
+            response.rows[0].created_at = modules.niceDate(
                 response.rows[0].created_at
-            ).toLocaleString();
+            );
             res.json(response.rows);
         })
         .catch(err => {
@@ -90,9 +92,9 @@ app.get("/get-comments/:imageid", (req, res) => {
     db.getComments(req.params.imageid)
         .then(response => {
             for (var i = 0; i < response.rows.length; i++) {
-                response.rows[i].created_at = new Date(
+                response.rows[i].created_at = modules.niceDate(
                     response.rows[i].created_at
-                ).toLocaleString();
+                );
             }
             res.json(response.rows);
         })
@@ -102,9 +104,9 @@ app.get("/get-comments/:imageid", (req, res) => {
 app.post("/comment/add", (req, res) => {
     db.addComment(req.body.username, req.body.comment, req.body.imageid)
         .then(response => {
-            response.rows[0].created_at = new Date(
+            response.rows[0].created_at = modules.niceDate(
                 response.rows[0].created_at
-            ).toLocaleString();
+            );
             res.json(response.rows);
         })
         .catch(err => {
@@ -119,6 +121,16 @@ app.get("/images/prev/:imageid", (req, res) => {
         db.getComments(req.params.imageid)
     ])
         .then(response => {
+            for (var i = 0; i < response[0].rows.length; i++) {
+                response[0].rows[i].created_at = modules.niceDate(
+                    response[0].rows[i].created_at
+                );
+            }
+            for (i = 0; i < response[1].rows.length; i++) {
+                response[1].rows[i].created_at = modules.niceDate(
+                    response[1].rows[i].created_at
+                );
+            }
             res.json({
                 image: response[0].rows,
                 comments: response[1].rows
@@ -133,6 +145,16 @@ app.get("/images/next/:imageid", (req, res) => {
         db.getComments(req.params.imageid)
     ])
         .then(response => {
+            for (var i = 0; i < response[0].rows.length; i++) {
+                response[0].rows[i].created_at = modules.niceDate(
+                    response[0].rows[i].created_at
+                );
+            }
+            for (i = 0; i < response[1].rows.length; i++) {
+                response[1].rows[i].created_at = modules.niceDate(
+                    response[1].rows[i].created_at
+                );
+            }
             res.json({
                 image: response[0].rows,
                 comments: response[1].rows

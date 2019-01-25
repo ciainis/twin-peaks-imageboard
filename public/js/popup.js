@@ -95,9 +95,10 @@
                 }
             },
             getpreviousimage: function() {
+                location.hash = this.nextid;
                 var self = this;
                 axios
-                    .get("/images/prev/" + self.previousid)
+                    .get("/images/prev/" + self.nextid)
                     .then(function(response) {
                         self.previousid = response.data.image[0].previous_id;
                         self.nextid = response.data.image[0].next_id;
@@ -109,9 +110,10 @@
                     });
             },
             getnextimage: function() {
+                location.hash = this.previousid;
                 var self = this;
                 axios
-                    .get("/images/next/" + self.nextid)
+                    .get("/images/next/" + self.previousid)
                     .then(function(response) {
                         self.previousid = response.data.image[0].previous_id;
                         self.nextid = response.data.image[0].next_id;

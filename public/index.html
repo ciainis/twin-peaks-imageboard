@@ -47,9 +47,9 @@
             <p id="close" @click="closePopUp">Back to board</p>
             <div id="popup-result">
                 <div class="card">
-                    <button v-if="previousid != null" @click="getpreviousimage">PREV</button>
+                    <button v-if="nextid != null" @click="getpreviousimage">PREV</button>
                     <img :src="image.url">
-                    <button v-if="nextid != null" @click="getnextimage">NEXT</button>
+                    <button v-if="previousid != null" @click="getnextimage">NEXT</button>
                 </div>
                 <h3>{{image.title}}</h3>
                 <p>{{image.description}}</p>
