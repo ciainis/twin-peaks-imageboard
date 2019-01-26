@@ -5,7 +5,7 @@ const uidSafe = require('uid-safe')
 const path = require('path')
 
 const {s3Url} = require('./config') 
-const {getImages, getImagesWithcommentCount, getImage, getImageWithCommentCount, addImage, getMoreImages, getMoreImagesWithCommentCount, isLastImage, getComments, addComment, addLike} = require('./db')
+const {getImages, getImagesWithcommentCount, getImage, getImageWithCommentCount, addImage, getMoreImages, getMoreImagesWithCommentCount, isLastImage, deleteImage, getComments, addComment, addLike} = require('./db')
 const {upload} = require('./s3')
 
 const app = express()
@@ -116,6 +116,16 @@ app.post('/like', (req, res) => {
         .catch(err => {
             console.log(err.message)
         })
+})
+
+app.post('/delete', (req, res) => {
+    deleteImage(req.body.id)
+    .then(result => {
+        console.log(result)
+    })
+    .catch(err => {
+        console.log(err.message)
+    })
 })
 
 

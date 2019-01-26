@@ -38,6 +38,24 @@
                     like: this.data.like_button,
                     id: this.data.id
                 })
+            },
+            deleteImageConfirm: function() {
+                document.getElementById('trash').style.display = 'none'
+                document.getElementById('confirm').style.display = 'block'
+            },
+            goBack: function() {
+                document.getElementById('trash').style.display = 'block'
+                document.getElementById('confirm').style.display = 'none'
+            },
+            deleteImage: function() {
+                console.log('click')
+                axios.post('/delete', {
+                    id: this.data.id
+                })
+                this.$emit('deletedimage', {
+                    id: this.data.id
+                })
+                this.$emit('close')
             }
         }
     })
@@ -211,20 +229,23 @@
                     return result.id === data.id
                 })
                 this.results[index].like_button = data.like
+            },
+            updateImage: function(data) {
+                var index = this.results.findIndex(function(result) {
+                    return result.id === data.id
+                })
+                this.results.splice(index, 1)
             }
         }, 
         watch: {
             results: function(newVal, oldVal) {
                 axios.get('/lastimage')
-                    .then(res => {
-
-                        //TODO CHECK THIS SOMETHING WRONG
-                        console.log(res)
+                    .then(function(res) {
                         this.lastImageID = res.data.rows[0].id
-                    })
-                if (this.lastImageID === this.results[this.results.length - 1].id) {
-                    this.showButton = false
-                }
+                        if (this.lastImageID === this.results[this.results.length - 1].id) {
+                            this.showButton = false
+                        }
+                    }.bind(this))
             }
         }   
     })

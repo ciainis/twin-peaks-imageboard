@@ -94,12 +94,13 @@ module.exports.getMoreImages = (lastID) => {
 module.exports.getMoreImagesWithCommentCount = (lastID) => {
     return db.query(`
         SELECT images.*,
-        LAG(id) OVER(ORDER BY id) as prev, 
-        LEAD(id) OVER(ORDER BY id) as next  
+        COUNT(comments.image_id) AS comments_count,
+        LAG(images.id) OVER(ORDER BY images.id) as prev, 
+        LEAD(images.id) OVER(ORDER BY images.id) as next  
         FROM images
-        WHERE id < $1
         LEFT JOIN comments
         ON images.id = comments.image_id
+        WHERE images.id < $1
         GROUP BY images.id
         ORDER BY id DESC
         LIMIT 9`,
@@ -123,6 +124,15 @@ module.exports.addImage = (url, username, title, description) => {
         VALUES ($1, $2, $3, $4)
         RETURNING *`,
         [url, username, title, description]
+    )
+}
+
+//DELETE IMAGE
+module.exports.deleteImage = (id) => {
+    return db.query(`
+        DELETE FROM images
+        WHERE id = $1`,
+        [id]
     )
 }
 

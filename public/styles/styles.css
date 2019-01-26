@@ -133,6 +133,7 @@ body, html {
     visibility: visible;
 }
 
+
 .like {
     position: absolute;
     bottom: 95px;
@@ -162,7 +163,6 @@ body, html {
     height: 30px;
     width: 30px;
     z-index: 400;
-    stroke-width: 10px;
     visibility: hidden;
 }
 
@@ -301,7 +301,41 @@ svg {
     fill: black;
 }
 
+#trash {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    height: 60px;
+    width: 60px;
+    fill: #000;
+    cursor: pointer;
+}
 
+#confirm {
+    display: none;
+    position: absolute;
+    bottom: 30px;
+    left: 20px;
+    height: 20px;
+    width: 200px;
+    fill: #000;
+}
+
+#yes {
+    cursor: pointer;
+}
+
+#yes:hover {
+    color: red
+}
+
+#no {
+    cursor: pointer;
+}
+
+#no:hover {
+    color: green
+}
 /* COMMENTS STYLE */
 
 .addcomments__container {
