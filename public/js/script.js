@@ -14,8 +14,6 @@
             error: ""
         }, //end data
         mounted: function() {
-            console.log("main mounted running!");
-            console.log(this.imageid);
             var self = this;
             axios.get("/images").then(function(response) {
                 if (response.data.length) {
@@ -27,6 +25,13 @@
             });
             window.addEventListener("hashchange", function() {
                 self.imageid = location.hash.slice(1);
+            });
+            var input = document.querySelector("#file");
+            var label = document.querySelector("label");
+            input.addEventListener("change", function(e) {
+                var fileName = "";
+                fileName = e.target.value.split("\\").pop();
+                label.innerHTML = fileName;
             });
         }, //end mounted
         methods: {
