@@ -18,6 +18,36 @@ module.exports.getImage = (id) => {
     )
 }
 
+// ADD LIKE 
+module.exports.addLike = (id, count) => {
+    return db.query(`
+        UPDATE images 
+        SET like_button = $2
+        WHERE id = $1
+        RETURNING *`,
+        [id, count]
+    )
+}
+
+// GET IMAGE WITH COMMENT COUNT
+module.exports.getImageWithCommentCount = (id) => {
+    return db.query(`
+        SELECT * 
+        FROM (
+            SELECT images.*,
+                COUNT(comments.image_id) AS comments_count,
+                LAG(images.id) OVER(ORDER BY images.created_at) as prev, 
+                LEAD(images.id) OVER(ORDER BY images.created_at) as next  
+            FROM images
+            LEFT JOIN comments
+            ON images.id = comments.image_id
+            GROUP BY images.id
+            ) AS t
+        WHERE id = $1`,
+        [id]
+    )
+}
+
 // GET IMAGES
 module.exports.getImages = () => {
     return db.query(`
@@ -30,6 +60,22 @@ module.exports.getImages = () => {
     `)
 }
 
+// GET IMAGES AND COMMENTS COUNT
+module.exports.getImagesWithcommentCount = () => {
+    return db.query(`
+        SELECT images.* ,
+        COUNT(comments.image_id) AS comments_count, 
+        LAG(images.id) OVER(ORDER BY images.id) as prev, 
+        LEAD(images.id) OVER(ORDER BY images.id) as next 
+        FROM images
+        LEFT JOIN comments
+        ON images.id = comments.image_id
+        GROUP BY images.id
+        ORDER BY images.id DESC
+        LIMIT 9
+    `)
+}
+
 // GET MORE IMAGES
 module.exports.getMoreImages = (lastID) => {
     return db.query(`
@@ -38,6 +84,23 @@ module.exports.getMoreImages = (lastID) => {
         LEAD(id) OVER(ORDER BY id) as next  
         FROM images
         WHERE id < $1
+        ORDER BY id DESC
+        LIMIT 9`,
+        [lastID]
+    )
+}
+
+// GET MORE IMAGES
+module.exports.getMoreImagesWithCommentCount = (lastID) => {
+    return db.query(`
+        SELECT images.*,
+        LAG(id) OVER(ORDER BY id) as prev, 
+        LEAD(id) OVER(ORDER BY id) as next  
+        FROM images
+        WHERE id < $1
+        LEFT JOIN comments
+        ON images.id = comments.image_id
+        GROUP BY images.id
         ORDER BY id DESC
         LIMIT 9`,
         [lastID]

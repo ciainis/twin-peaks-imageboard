@@ -107,30 +107,83 @@ body, html {
     border-radius: 1px;
     margin: 30px 30px;
     padding: 5px;
-    z-index: 10;
+}
+
+.images__container:hover > .title {
+    visibility: visible;
+}
+
+.images__container:hover > .image {
+    filter: brightness(0.6);
+}
+
+.images__container:hover > .like {
+    visibility: visible;
+}
+
+.images__container:hover > .comment__icon {
+    visibility: visible;
+}
+
+.images__container:hover > .comment__count {
+    visibility: visible;
+}
+
+.images__container:hover > .like__count {
+    visibility: visible;
 }
 
 .like {
     position: absolute;
-    top: 100px;
-    left: 40px;
-    height: 80px;
-    width: 80px;
+    bottom: 95px;
+    left: 80px;
+    height: 30px;
+    width: 30px;
     z-index: 400;
+    visibility: hidden;
+}
+
+.like__count {
+    position: absolute;
+    font-size: 1.8rem;
+    color: #FFF;
+    bottom: 96px;
+    left: 120px;
+    height: 30px;
+    width: 30px;
+    z-index: 400;
+    visibility: hidden;
 }
 
 .comment__icon {
     position: absolute;
-    top: 110px;
-    right: 50px;
-    height: 50px;
-    width: 50px;
+    bottom: 95px;
+    right: 100px;
+    height: 30px;
+    width: 30px;
     z-index: 400;
+    stroke-width: 10px;
+    visibility: hidden;
+}
+
+.comment__count {
+    position: absolute;
+    font-size: 1.8rem;
+    color: #FFF;
+    bottom: 96px;
+    right: 60px;
+    height: 30px;
+    width: 30px;
+    z-index: 400;
+    visibility: hidden;
 }
 
 .title {
-    font-size: 1.4rem;
+    font-size: 2rem;
+    color: white;
+    transform: translateY(-170px);
     text-align: center;
+    visibility: hidden;
 }
 
 .image {
@@ -141,10 +194,6 @@ body, html {
     object-fit: cover;
     margin-bottom: 10px;
     cursor: pointer;
-}
-
-.image:hover {
-    filter: brightness(0.4);
 }
 
 .button__container {
@@ -192,6 +241,7 @@ body, html {
 }
 
 .modal__container {
+    position: relative;
     height: 90vh;
     width: 90vw;
     display: flex;
@@ -212,6 +262,7 @@ svg {
 }
 
 .image__info {
+    position: relative;
     display: flex;
     flex-direction: column;
     width: 55vw;
@@ -239,6 +290,15 @@ svg {
 .username__modal {
     text-align: center;
     font-size: 1.4rem;
+}
+
+#like__modal {
+    position: absolute;
+    bottom: 25px;
+    right: 25px;
+    height: 50px;
+    width: 50px;
+    fill: black;
 }
 
 
@@ -273,6 +333,11 @@ svg {
 .comments__container {
     height: 65%;
     overflow: scroll;
+}
+
+.no__comments {
+    display: flex;
+    justify-content: center;
 }
 
 .comment__btn {

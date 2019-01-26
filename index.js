@@ -5,7 +5,7 @@ const uidSafe = require('uid-safe')
 const path = require('path')
 
 const {s3Url} = require('./config') 
-const {getImages, getImage, addImage, getMoreImages, isLastImage, getComments, addComment} = require('./db')
+const {getImages, getImagesWithcommentCount, getImage, getImageWithCommentCount, addImage, getMoreImages, getMoreImagesWithCommentCount, isLastImage, getComments, addComment, addLike} = require('./db')
 const {upload} = require('./s3')
 
 const app = express()
@@ -38,7 +38,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/images', (req, res) => {
-    getImages()
+    getImagesWithcommentCount()
         .then( data => {
             res.json(data)
         })
@@ -48,7 +48,7 @@ app.get('/images', (req, res) => {
 })
 
 app.post('/image', (req, res) => {
-    getImage(req.body.id)
+    getImageWithCommentCount(req.body.id)
         .then( data => {
             res.json(data)
         })
@@ -68,8 +68,8 @@ app.get('/lastimage', (req, res) => {
 })
 
 app.post('/moreimages', (req, res) => {
-    getMoreImages(req.body.lastID)
-        .then( data => {
+    getMoreImagesWithCommentCount(req.body.lastID)
+        .then(data => {
             res.json(data)
         })
         .catch(err => {
@@ -100,12 +100,22 @@ app.post('/allcomments', (req, res) => {
 
 app.post('/comments', (req, res) => {
     addComment(req.body.username, req.body.comment, req.body.imageID)
-    .then(data => { 
-        res.json(data)
-    })
-    .catch(err => {
-        console.log(err.message)
-    })
+        .then(data => { 
+            res.json(data)
+        })
+        .catch(err => {
+            console.log(err.message)
+        })
+})
+
+app.post('/like', (req, res) => {
+    addLike(req.body.id, req.body.like)
+        .then(result => {
+            res.json(result)
+        })
+        .catch(err => {
+            console.log(err.message)
+        })
 })
 
 

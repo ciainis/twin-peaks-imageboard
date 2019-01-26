@@ -19,6 +19,25 @@
             },
             prevImage: function() {
                 location.hash = this.data.prev
+            },
+            updatecomment: function(count) {
+                this.data.comment_counts = count
+                this.$emit('updatecount', {
+                    count: this.data.comment_counts,
+                    id: this.data.id
+                })
+            },
+            incLike: function() {
+                document.getElementById('like__modal').style.cssText = 'fill:red'
+                this.data.like_button += 1
+                axios.post('/like', {
+                    id: this.data.id,
+                    like: this.data.like_button
+                })
+                this.$emit('updatelike', {
+                    like: this.data.like_button,
+                    id: this.data.id
+                })
             }
         }
     })
@@ -46,6 +65,9 @@
                     imageID: this.id
                 })
                 .then(res => {
+                    res.data.rows.forEach(function(row, index) {
+                        res.data.rows[index].created_at = moment(row.created_at).format('llll')
+                    })
                     this.comments.unshift(res.data.rows[0])
                 })
             }
@@ -65,6 +87,7 @@
         watch: {
             newcomment: function(newval, oldval) {
                 this.results.unshift(newval[0])
+                this.$parent.$emit("commentadded", this.results.length)
             },
             imageID: function(newVal, oldVal) {
                 axios.post('/allcomments', {
@@ -171,18 +194,32 @@
             },
             showModal: function(data) {
                 this.currentImage = data
-                console.log(this.currentImage.prev)
                 location.hash = `#${this.currentImage.id}`
             },
             closeModal: function() {
                 this.currentImage = {}
                 location.hash = ''
+            },
+            updatecommentcount: function(data) {
+                var index = this.results.findIndex(function(result) {
+                    return result.id === data.id
+                })
+                this.results[index].comments_count = data.count
+            },
+            updatelikecount: function(data) {
+                var index = this.results.findIndex(function(result) {
+                    return result.id === data.id
+                })
+                this.results[index].like_button = data.like
             }
         }, 
         watch: {
             results: function(newVal, oldVal) {
                 axios.get('/lastimage')
                     .then(res => {
+
+                        //TODO CHECK THIS SOMETHING WRONG
+                        console.log(res)
                         this.lastImageID = res.data.rows[0].id
                     })
                 if (this.lastImageID === this.results[this.results.length - 1].id) {
