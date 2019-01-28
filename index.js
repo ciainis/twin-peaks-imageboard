@@ -89,6 +89,7 @@ app.get("/images/more/:imageid", (req, res) => {
 });
 
 app.get("/get-comments/:imageid", (req, res) => {
+    console.log / "getting comments";
     db.getComments(req.params.imageid)
         .then(response => {
             for (var i = 0; i < response.rows.length; i++) {

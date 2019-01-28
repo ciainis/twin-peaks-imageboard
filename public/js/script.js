@@ -5,6 +5,7 @@
             images: [],
             imageid: location.hash.slice(1),
             lowestid: null,
+            image: [],
             form: {
                 title: "",
                 description: "",
@@ -24,6 +25,15 @@
             });
             window.addEventListener("hashchange", function() {
                 self.imageid = location.hash.slice(1);
+            });
+
+            var input = document.querySelector("#file");
+            var label = document.querySelector("label");
+
+            input.addEventListener("change", function(e) {
+                var fileName = "";
+                fileName = e.target.value.split("\\").pop();
+                label.innerHTML = fileName;
             });
         }, //end mounted
         methods: {
@@ -76,6 +86,9 @@
                     .catch(function(err) {
                         console.log(err);
                     });
+            },
+            send: function(image) {
+                this.image = image;
             }
         } //end methods
     }); //end vue

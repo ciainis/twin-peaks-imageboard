@@ -3,11 +3,6 @@ body {
     margin: 0 0 10px 0;
 }
 
-.modal-open {
-    overflow: hidden;
-    height: 100vh;
-}
-
 .header {
     background-image: url("/pattern-example.png");
     background-size: contain;
@@ -147,20 +142,6 @@ img {
     font-style: oblique;
 }
 
-.prev-next {
-    display: inline-block;
-    margin-right: 10px;
-    margin-left: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-#prev,
-#next {
-    font-size: 14px;
-}
-
 .comments-container {
     height: 58%;
     overflow: scroll;
@@ -171,5 +152,16 @@ img {
 }
 
 #submit {
+    font-size: 14px;
+}
+
+.prev-next {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#prev,
+#next {
     font-size: 14px;
 }
