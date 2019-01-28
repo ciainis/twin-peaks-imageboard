@@ -3,6 +3,11 @@ body {
     margin: 0 0 10px 0;
 }
 
+.modal-open {
+    overflow: hidden;
+    height: 100vh;
+}
+
 .header {
     background-image: url("/pattern-example.png");
     background-size: contain;
@@ -86,53 +91,85 @@ img {
     margin: auto;
 }
 
-#popup {
-    background: black;
-    color: white;
+.cloud {
+    background-color: rgba(0, 0, 0, 0.6);
+    height: 100%;
     position: fixed;
-    overflow: scroll;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    text-align: center;
 }
 
-#close {
+.result {
+    height: 500px;
+    background: white;
     position: absolute;
-    top: 5px;
-    right: 30px;
-    cursor: pointer;
-    text-decoration: underline;
-}
-
-#popup img {
-    border: 1px solid white;
-}
-
-.add-comments p {
-    display: inline-block;
-}
-
-.comment-container {
-    background: red;
+    display: flex;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 70%;
-    margin: auto;
-    padding-bottom: 3px;
-    border: 2px solid white;
 }
 
-.uploaded-by {
-    font-style: italic;
+.result img {
+    height: 500px;
+    min-width: 500px;
+    margin-bottom: 0;
+}
+
+.image-info {
+    margin-left: 10px;
+    margin-right: 10px;
+    font-size: 12px;
+    width: 100%;
+}
+
+.add-comments {
+    padding-top: 10px;
+}
+
+.add-comments input {
     font-size: 12px;
 }
 
-.button {
+.add-comments p,
+.add-comments button {
     display: inline-block;
 }
 
-.card {
+#add-comment {
+    width: 95%;
+    height: 40px;
+}
+
+.uploaded-by {
+    font-style: oblique;
+}
+
+.prev-next {
+    display: inline-block;
+    margin-right: 10px;
+    margin-left: 10px;
     display: flex;
-    justify-content: space-around;
-    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#prev,
+#next {
+    font-size: 14px;
+}
+
+.comments-container {
+    height: 58%;
+    overflow: scroll;
+}
+
+.post {
+    border-bottom: 1px solid black;
+}
+
+#submit {
+    font-size: 14px;
 }

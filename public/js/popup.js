@@ -7,14 +7,12 @@
                 nextid: null,
                 comment: "",
                 username: "",
-                comments: [],
-                error: ""
+                comments: []
             };
         },
         template: "#popup",
         props: ["imageid"],
         mounted: function() {
-            console.log("mounted running!");
             var self = this;
             axios
                 .get("/get-image/" + this.imageid)
@@ -85,14 +83,13 @@
                             username: self.username
                         })
                         .then(function(response) {
-                            self.error = null;
-                            self.comments.unshift(response.data[0]);
+                            self.comments.push(response.data[0]);
+                            self.comment = null;
+                            self.username = null;
                         })
                         .catch(function(err) {
                             console.log(err);
                         });
-                } else {
-                    self.error = "Something went wrong... Please try again!";
                 }
             },
             getpreviousimage: function() {

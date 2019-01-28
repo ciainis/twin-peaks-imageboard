@@ -59,8 +59,7 @@ module.exports.getComments = function(imageid) {
     return db.query(
         `SELECT username, comment, created_at
         FROM comments
-        WHERE image_id = $1
-        ORDER BY id DESC`,
+        WHERE image_id = $1`,
         [imageid]
     );
 };

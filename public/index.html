@@ -6,13 +6,10 @@
 </head>
 <body>
     <div class="header">
-        <h1>POSTCARDS FROM TWIN PEAKS</h1>
+        <h1>WELCOME TO TWIN PEAKS</h1>
     </div>
-
     <div id="main">
-
         <hello-diane v-on:closepopup="doclosepopup" v-if="imageid" :imageid="imageid"></hello-diane>
-
         <div class="add-image">
             <input id="file" type="file" accept="image/*">
             <label for="file">CHOOSE AN IMAGE</label>
@@ -26,46 +23,43 @@
             </div>
             <button @click="uploadFile">UPLOAD</button>
         </div>
-
         <div class="imageboard">
             <a v-if="images.length" v-for="image in images" :href="'#' + image.id" class="image-container" >
                 <img :src="image.url" :alt="image.title">
             </a>
         </div>
-
-
         <button id="load-more" v-if="images.length && images[images.length - 1].id > lowestid" @click="getMoreImages" type="button">LOAD MORE</button>
-
     </div>
 
     <script id="popup" type="text/x-template">
-        <div id="popup">
-            <p id="close" @click="closePopUp">Back to board</p>
-            <div id="popup-result">
-                <div class="card">
-                    <button v-if="nextid != null" @click="getpreviousimage">PREV</button>
-                    <img :src="image.url">
-                    <button v-if="previousid != null" @click="getnextimage">NEXT</button>
+        <div class="cloud" @click.self="closePopUp">
+            <div class="result">
+                <img :src="image.url">
+                <div class="image-info">
+                    <div class="post">
+                        <h4>{{image.title}}</h4>
+                        <p>{{image.description}}</p>
+                        <p class="uploaded-by">posted by <strong>{{image.username}}</strong> on {{image.created_at}}</p>
+                    </div>
+
+                    <div class="comments-container">
+                        <p v-if="comments.length" v-for="comment in comments"><strong>{{comment.username}}</strong> {{comment.comment}}</p>
+                    </div>
+
+                    <div class="add-comments">
+                        <input id="add-comment" v-model="comment" placeholder="Add a comment..."/>
+                        <div>
+                            <p>Username</p>
+                            <input v-model="username">
+                            <button id="submit" type="button" name="button" @click="submitComment">SUBMIT</button>
+                        </div>
+                    </div>
                 </div>
-                <h3>{{image.title}}</h3>
-                <p>{{image.description}}</p>
-                <p class="uploaded-by">Uploaded by: {{image.username}} on {{image.created_at}}</p>
+                <div class="prev-next">
+                    <button id="prev" v-if="nextid != null" @click="getpreviousimage">PREV</button>
+                    <button id="next" v-if="previousid != null" @click="getnextimage">NEXT</button>
+                </div>
             </div>
-
-            <div class="add-comments">
-                <h3>Add a comment!</h3>
-                <p>Comment</p> <input v-model="comment" type="text" name="comment">
-                <p>Username</p> <input v-model="username" type="text" name="username">
-                <button type="button" name="button" @click="submitComment">SUBMIT</button>
-            </div>
-
-            <p>{{error}}</p>
-
-            <div class="comment-container" v-if="comments.length" v-for="comment in comments">
-                <p>{{comment.comment}}</p>
-                <p class="uploaded-by">Posted by: {{comment.username}} on {{comment.created_at}}</p>
-            </div>
-
         </div>
     </script>
 
@@ -73,5 +67,6 @@
     <script src="/js/axios.min.js"></script>
     <script src="/js/popup.js"></script>
     <script src="/js/script.js"></script>
+    <script src="/js/label.js"></script>
 </body>
 </html>

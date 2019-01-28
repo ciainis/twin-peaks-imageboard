@@ -10,8 +10,7 @@
                 description: "",
                 username: "",
                 file: null
-            },
-            error: ""
+            }
         }, //end data
         mounted: function() {
             var self = this;
@@ -25,13 +24,6 @@
             });
             window.addEventListener("hashchange", function() {
                 self.imageid = location.hash.slice(1);
-            });
-            var input = document.querySelector("#file");
-            var label = document.querySelector("label");
-            input.addEventListener("change", function(e) {
-                var fileName = "";
-                fileName = e.target.value.split("\\").pop();
-                label.innerHTML = fileName;
             });
         }, //end mounted
         methods: {
@@ -49,6 +41,7 @@
                 formData.append("username", this.form.username);
                 //now we send stuff to our server via post request
                 var self = this;
+                var label = document.querySelector("label");
                 axios
                     .post("/upload", formData)
                     .then(function(response) {
@@ -60,10 +53,10 @@
                         self.form.title = null;
                         self.form.description = null;
                         self.form.username = null;
+                        label.innerHTML = "CHOOSE AN IMAGE";
                     })
                     .catch(function(err) {
                         console.log(err);
-                        self.error = "Error!";
                     });
             }, //end uploadFile
             setImageId: function(e) {
