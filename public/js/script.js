@@ -4,11 +4,6 @@
 
     Vue.component('imagemodal', {
         template: '#modal__template',
-        data: function() {
-           return {
-
-           } 
-        },
         props: ['data'],
         methods: {
             close: function() {
@@ -172,17 +167,28 @@
                 }.bind(this))
             }
             this.$nextTick(function() {
-                window.addEventListener('hashchange', function(){
-                    axios.post('/image', {
-                        id: location.hash.slice(1)
-                    })
-                    .then(function(res) {
-                        res.data.rows.forEach(function(row, index) {
-                            res.data.rows[index].created_at = moment(row.created_at).format('llll')
+                window.addEventListener('hashchange', function(){                    
+                    if (location.hash) {
+                       var found = this.results.some(function(result) {
+                                    return result.id == location.hash.slice(1)
+                                })
+                        if (!found) {
+                            this.currentImage = {}
+                            location.hash = ''
+                            return
+                        } 
+                        axios.post('/image', {
+                            id: location.hash.slice(1)
                         })
-                        this.currentImage = res.data.rows[0]
-                    }.bind(this))
+                        .then(function(res) {
+                            res.data.rows.forEach(function(row, index) {
+                                res.data.rows[index].created_at = moment(row.created_at).format('llll')
+                            })
+                            this.currentImage = res.data.rows[0]
+                        }.bind(this))
+                    }
                 }.bind(this))
+                
             })
         },
         methods: {

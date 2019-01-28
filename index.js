@@ -39,7 +39,7 @@ app.get('/', (req, res) => {
 
 app.get('/images', (req, res) => {
     getImagesWithcommentCount()
-        .then( data => {
+        .then(data => {
             res.json(data)
         })
         .catch(err => {
@@ -49,11 +49,11 @@ app.get('/images', (req, res) => {
 
 app.post('/image', (req, res) => {
     getImageWithCommentCount(req.body.id)
-        .then( data => {
+        .then(data => {
             res.json(data)
         })
         .catch(err => {
-            console.log(err.message)
+            console.log('here',err.message)
         })     
 })
 

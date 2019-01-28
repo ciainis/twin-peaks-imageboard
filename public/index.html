@@ -32,7 +32,7 @@
 
         <div class="cards__container">
             <div class="cards" v-if="results.length > 0">
-                <div class="images__container" v-for="result in results">
+                <div class="images__container" @click="showModal(result)" v-for="result in results">
                     <div class="like__count">{{result.like_button}}</div>
                     <svg class="like" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" x="0px" y="0px" viewBox="0 0 512 640" style="enable-background:new 0 0 512 512;" xml:space="preserve"><g>
                         <path d="M67.7,295.9l152.6,143.9c10,9.4,22.8,14.1,35.7,14.1c12.8,0,25.7-4.7,35.7-14.1l152.7-143.9   c0.1-0.1,0.2-0.2,0.3-0.2c26.2-26.2,40.6-61.2,40.6-98.5s-14.4-72.3-40.6-98.5c-25.8-25.8-61.2-38.4-99.5-35.3   c-32,2.6-63.8,16.2-89.1,37.7C223.9,72.5,193.7,58,165.9,58c-37.3,0-72.3,14.4-98.5,40.6c-26.2,26.2-40.7,61.2-40.7,98.6   c0,37.3,14.4,72.3,40.7,98.5C67.5,295.8,67.6,295.8,67.7,295.9z M84.4,115.6C106.1,93.9,135,82,165.9,82   c23.4,0,51.7,15.2,81.8,44.1c4.7,4.5,12.1,4.4,16.7-0.1c22.4-22.1,52.5-36.2,82.6-38.7c31.2-2.5,59.8,7.5,80.6,28.3   c21.7,21.7,33.6,50.6,33.6,81.6c0,30.9-11.9,59.8-33.5,81.4L275.2,422.4c-10.8,10.2-27.6,10.2-38.4,0L84.3,278.6   c-21.6-21.6-33.5-50.6-33.5-81.4C50.7,166.3,62.7,137.3,84.4,115.6z"/></g>
@@ -44,7 +44,7 @@
                         <path d="M20,55H60a2,2,0,0,0,0-4H20a2,2,0,0,0,0,4Z"/>
                     </svg>
                     <div class="comment__count">{{result.comments_count || 0}}</div>
-                    <img class="image" :src="result.url" @click="showModal(result)"/>
+                    <img class="image" :src="result.url" />
                     <p class="title">{{result.title}}</p>
                 </div>
                 <div class="button__container" v-if="showButton">
@@ -94,7 +94,7 @@
     <!-- MODAL TEMPLATE -->
     <script id="modal__template" type="text/x-template">
         <div class="modal">
-            <svg @click="nextImage" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 0 100 125" x="0px" y="0px">
+            <svg id="prev-arrow" @click="nextImage" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 0 100 125" x="0px" y="0px">
                 <title>Ui_Thin_Icon_Left</title>
                 <path d="M50,89.38A39.38,39.38,0,1,1,89.38,50,39.42,39.42,0,0,1,50,89.38Zm0-74.75A35.38,35.38,0,1,0,85.38,50,35.4,35.4,0,0,0,50,14.63Zm5.34,50a2,2,0,0,0,0-2.83L43.56,50,55.34,38.23a2,2,0,0,0-2.83-2.83L39.32,48.59a2,2,0,0,0,0,2.82L52.51,64.6a2,2,0,0,0,1.41.59A2,2,0,0,0,55.34,64.6Z"/>
             </svg>
@@ -121,7 +121,7 @@
                 >
                 </addcomments>
             </div>
-            <svg @click="prevImage" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 0 100 125" x="0px" y="0px">
+            <svg id="next-arrow" @click="prevImage" xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 0 100 125" x="0px" y="0px">
                 <title>Ui_Thin_Icon_Right</title>
                 <path d="M50,89.38A39.38,39.38,0,1,1,89.38,50,39.42,39.42,0,0,1,50,89.38Zm0-74.75A35.38,35.38,0,1,0,85.38,50,35.4,35.4,0,0,0,50,14.63Zm-2.51,50L60.68,51.41a2,2,0,0,0,0-2.82L47.49,35.4a2,2,0,0,0-2.83,2.83L56.44,50,44.66,61.77a2,2,0,1,0,2.83,2.83Z"/>
             </svg>
