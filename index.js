@@ -53,7 +53,7 @@ app.post('/image', (req, res) => {
             res.json(data)
         })
         .catch(err => {
-            console.log('here',err.message)
+            console.log(err.message)
         })     
 })
 
@@ -121,7 +121,6 @@ app.post('/like', (req, res) => {
 app.post('/delete', (req, res) => {
     deleteImage(req.body.id)
     .then(result => {
-        console.log(result)
     })
     .catch(err => {
         console.log(err.message)

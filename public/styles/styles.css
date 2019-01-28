@@ -276,15 +276,6 @@ body, html {
     fill: white;
     cursor: pointer;
 }
-/* 
-svg {
-    align-self: center;
-    height: 150px;
-    width: 150px;
-    z-index: 3000;
-    fill: white;
-    cursor: pointer;
-} */
 
 .image__info {
     position: relative;

@@ -44,7 +44,7 @@
                         <path d="M20,55H60a2,2,0,0,0,0-4H20a2,2,0,0,0,0,4Z"/>
                     </svg>
                     <div class="comment__count">{{result.comments_count || 0}}</div>
-                    <img class="image" :src="result.url" />
+                    <img class="image" :key="result.id" :src="result.url" />
                     <p class="title">{{result.title}}</p>
                 </div>
                 <div class="button__container" v-if="showButton">

@@ -43,7 +43,6 @@
                 document.getElementById('confirm').style.display = 'none'
             },
             deleteImage: function() {
-                console.log('click')
                 axios.post('/delete', {
                     id: this.data.id
                 })
