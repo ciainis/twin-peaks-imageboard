@@ -5,5 +5,5 @@ CREATE TABLE comments(
     username VARCHAR(255) NOT NULL,
     comment TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    image_id INTEGER NOT NULL REFERENCES images(id)
+    image_id INTEGER NOT NULL REFERENCES images(id) ON DELETE CASCADE
 );
