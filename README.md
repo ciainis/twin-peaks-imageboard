@@ -12,6 +12,8 @@ Registration or login are not required: every user can upload pictures and comme
 
 Users can click on each picture and leave comments.
 
+<img src='./public/assets/comment.gif' width='450px'>
+
 ## Built with
 
 Vue.js, JavaScript, PostgreSQL, CSS, HTML
