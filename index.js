@@ -43,11 +43,6 @@ app.get("/images", (req, res) => {
 });
 
 app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
-    //uploader.single("file") puts the file into the uploads folder and changes the name of file to be some unique 24 character string
-    console.log("POST upload!");
-    // console.log(req.body); //file is not here
-    // console.log(req.file); //file is here. it only happens with files; filename is the unique name.
-    //save all the stuff in the database
     db.addImage(
         config.s3Url + req.file.filename,
         req.body.username,
@@ -89,7 +84,6 @@ app.get("/images/more/:imageid", (req, res) => {
 });
 
 app.get("/get-comments/:imageid", (req, res) => {
-    console.log / "getting comments";
     db.getComments(req.params.imageid)
         .then(response => {
             for (var i = 0; i < response.rows.length; i++) {
