@@ -39,6 +39,7 @@
         methods: {
             //every functions that i want to run in response to events
             uploadFile: function(e) {
+                console.log('form submit');
                 e.preventDefault();
                 var file = document.getElementById("file"); //get file object
                 var uploadedFile = file.files[0]; //access file

@@ -1,7 +1,7 @@
 const knox = require('knox');
 const fs = require('fs');
 
-// let secrets = require('./secrets'); // secrets.json is in .gitignore
+let secrets = require('./secrets'); // secrets.json is in .gitignore
 
 const client = knox.createClient({
   key: process.env.AWS_KEY || secrets.AWS_KEY,

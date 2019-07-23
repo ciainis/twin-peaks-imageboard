@@ -2,64 +2,75 @@
 <html>
 <head>
     <title>Twin Peaks Imageboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.css">
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-    <div class="header">
-        <h1>WELCOME TO TWIN PEAKS</h1>
+    <div id="header">
+        <h1 class="header__heading">WELCOME TO TWIN PEAKS</h1>
     </div>
     <div id="main">
         <first-component v-on:sendtosecond="send" v-on:closepopup="doclosepopup" v-if="imageid" :imageid="imageid"></first-component>
-        <div class="add-image">
-            <input id="file" type="file" accept="image/*">
-            <label for="file">CHOOSE AN IMAGE</label>
-            <div class="">
-                <p>Username</p>
-                <input v-model="form.username">
-                <p>Title</p>
-                <input v-model="form.title">
-                <p>Description</p>
-                <input v-model="form.description">
+        <section>
+            <div class="ui large form">
+                <input id="file" type="file" accept="image/*">
+                <label for="file">SELECT PHOTO</label>
+                <div class="fields">
+                    <div class="field">
+                        <label>Username</label>
+                        <input v-model="form.username">
+                    </div>
+                    <div class="field">
+                        <label>Title</label>
+                        <input v-model="form.title">
+                    </div>
+                    <div class="field">
+                        <label>Description</label>
+                        <input v-model="form.description">
+                    </div> 
+                </div>  
+                <button @click="uploadFile">UPLOAD</button>           
             </div>
-            <button @click="uploadFile">UPLOAD</button>
-        </div>
-        <div class="imageboard">
-            <a v-if="images.length" v-for="image in images" :href="'#' + image.id" class="image-container" >
-                <img :src="image.url" :alt="image.title">
-            </a>
-        </div>
-        <button id="load-more" v-if="images.length && images[images.length - 1].id > lowestid" @click="getMoreImages" type="button">LOAD MORE</button>
+        </section>
+
+        <section id="imageboard" class="ui three column centered stackable grid container">
+            <div v-if="images.length" v-for="image in images" class="ui center aligned column">
+                <a :href="'#' + image.id">
+                    <img :src="image.url" :alt="image.title" />
+                </a>
+            </div>
+        </section>
+        <button id="btn-load-more" v-if="images.length && images[images.length - 1].id > lowestid" @click="getMoreImages" type="button">LOAD MORE</button>
     </div>
 
     <script id="pop-up" type="text/x-template">
-        <div class="cloud" @click.self="closePopUp">
-            <div class="result">
-                <img :src="image.url">
+        <div class="modal" @click.self="closePopUp">
+            <i class="chevron left icon" id="prev" v-if="nextid != null" @click="getpreviousimage"></i>
+            <div class="modal__content">
+                <img :src="image.url" class="modal__img">
                 <second-component :imageid="imageid" :image="image"></second-component>
-                <div class="prev-next">
-                    <button id="prev" v-if="nextid != null" @click="getpreviousimage">PREV</button>
-                    <button id="next" v-if="previousid != null" @click="getnextimage">NEXT</button>
-                </div>
             </div>
+            <i class="chevron right icon" id="next" v-if="previousid != null" @click="getnextimage"></i>
         </div>
     </script>
 
     <script id="comments-section" type="text/x-template">
-        <div class="image-info">
-            <div class="post">
-                <h4>{{image.title}}</h4>
-                <p>{{image.description}}</p>
-                <p class="uploaded-by">posted by <strong>{{image.username}}</strong> on {{image.created_at}}</p>
+        <div class="modal__info">
+            <div class="modal__post-details ui vertical segment">
+                <h2 class="ui header">{{image.title}}</h2>
+                <p class="modal__text">{{image.description}}</p>
+                <p class="modal__text-uploaded-by">posted by <span class="bold">{{image.username}}</span></p>
             </div>
-            <div class="comments-container">
-                <p v-if="comments.length" v-for="comment in comments"><strong>{{comment.username}}</strong> {{comment.comment}}</p>
+            <div class="modal__comment-container">
+                <p v-if="comments.length" v-for="comment in comments"><span class="bold modal__comment-name">{{comment.username}}</span> {{comment.comment}}</p>
             </div>
-            <div class="add-comments">
-                <input id="add-comment" v-model="comment" placeholder="Add a comment..."/>
-                <div>
-                    <p>Username</p>
-                    <input v-model="username">
-                    <button id="submit" type="button" name="button" @click="submitComment">SUBMIT</button>
+            <div class="modal__comment-add">
+                <div class="ui small fluid input">
+                    <input class="ui input" id="add-comment" v-model="comment" placeholder="Add a comment..."/>
+                </div>
+                <div class="ui small fluid action input">
+                    <input class="ui input" v-model="username" placeholder="Username">
+                    <button class="ui button" id="submit" type="button" name="button" @click="submitComment">Post</button>
                 </div>
             </div>
         </div>
