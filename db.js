@@ -1,157 +1,77 @@
-const spicedPg = require('spiced-pg')
-const {dbUser, dbPass} = require('./secrets') 
+const spicedPg = require('spiced-pg');
 
-db = spicedPg(`postgres://${dbUser}:${dbPass}@localhost:5432/imageboard`)
+// const { dbUser, dbPass } = require('./secrets');
+const db = spicedPg(
+  process.env.DATABASE_URL ||
+    `postgres:${dbUser}:${dbPass}@localhost:5432/imageboard`
+);
 
-// GET IMAGE
-module.exports.getImage = (id) => {
-    return db.query(`
-        SELECT *
-        FROM (
-            SELECT *,
-                LAG(id) OVER(ORDER BY created_at) as prev, 
-                LEAD(id) OVER(ORDER BY created_at) as next  
-            FROM images
-            ) AS t
-        WHERE id = $1`,
-        [id]
-    )
-}
-
-// ADD LIKE 
-module.exports.addLike = (id, count) => {
-    return db.query(`
-        UPDATE images 
-        SET like_button = $2
-        WHERE id = $1
-        RETURNING *`,
-        [id, count]
-    )
-}
-
-// GET IMAGE WITH COMMENT COUNT
-module.exports.getImageWithCommentCount = (id) => {
-    return db.query(`
-        SELECT * 
-        FROM (
-            SELECT images.*,
-                COUNT(comments.image_id) AS comments_count,
-                LAG(images.id) OVER(ORDER BY images.created_at) as prev, 
-                LEAD(images.id) OVER(ORDER BY images.created_at) as next  
-            FROM images
-            LEFT JOIN comments
-            ON images.id = comments.image_id
-            GROUP BY images.id
-            ) AS t
-        WHERE id = $1`,
-        [id]
-    )
-}
-
-// GET IMAGES
-module.exports.getImages = () => {
-    return db.query(`
-        SELECT *, 
-        LAG(id) OVER(ORDER BY id) as prev, 
-        LEAD(id) OVER(ORDER BY id) as next 
+module.exports.getImages = function() {
+  return db.query(
+    `SELECT *, (
+	        SELECT id FROM images
+	        ORDER BY id ASC
+	        LIMIT 1) as lowest_id
         FROM images
-        ORDER BY id DESC
-        LIMIT 9
-    `)
-}
+        ORDER BY id
+        DESC LIMIT 9`
+  );
+};
 
-// GET IMAGES AND COMMENTS COUNT
-module.exports.getImagesWithcommentCount = () => {
-    return db.query(`
-        SELECT images.* ,
-        COUNT(comments.image_id) AS comments_count, 
-        LAG(images.id) OVER(ORDER BY images.id) as prev, 
-        LEAD(images.id) OVER(ORDER BY images.id) as next 
-        FROM images
-        LEFT JOIN comments
-        ON images.id = comments.image_id
-        GROUP BY images.id
-        ORDER BY images.id DESC
-        LIMIT 9
-    `)
-}
-
-// GET MORE IMAGES
-module.exports.getMoreImages = (lastID) => {
-    return db.query(`
-        SELECT *,
-        LAG(id) OVER(ORDER BY id) as prev, 
-        LEAD(id) OVER(ORDER BY id) as next  
+module.exports.getMoreImages = function(imageid) {
+  return db.query(
+    `SELECT *
         FROM images
         WHERE id < $1
         ORDER BY id DESC
         LIMIT 9`,
-        [lastID]
-    )
-}
+    [imageid]
+  );
+};
 
-// GET MORE IMAGES
-module.exports.getMoreImagesWithCommentCount = (lastID) => {
-    return db.query(`
-        SELECT images.*,
-        COUNT(comments.image_id) AS comments_count,
-        LAG(images.id) OVER(ORDER BY images.id) as prev, 
-        LEAD(images.id) OVER(ORDER BY images.id) as next  
-        FROM images
-        LEFT JOIN comments
-        ON images.id = comments.image_id
-        WHERE images.id < $1
-        GROUP BY images.id
-        ORDER BY id DESC
-        LIMIT 9`,
-        [lastID]
-    )
-}
-
-// IS LAST IMAGE
-module.exports.isLastImage = () => {
-    return db.query(`
-        SELECT id FROM images
-        ORDER BY id ASC
-        LIMIT 1
-    `)
-}
-
-// ADD IMAGE
-module.exports.addImage = (url, username, title, description) => {
-    return db.query(`
-        INSERT INTO images (url, username, title, description)
+module.exports.addImage = function(url, username, title, description) {
+  return db.query(
+    `INSERT INTO images (url, username, title, description)
         VALUES ($1, $2, $3, $4)
         RETURNING *`,
-        [url, username, title, description]
-    )
-}
+    [url, username, title, description]
+  );
+};
 
-//DELETE IMAGE
-module.exports.deleteImage = (id) => {
-    return db.query(`
-        DELETE FROM images
+module.exports.getImage = function(imageid) {
+  return db.query(
+    `SELECT *, (
+            SELECT id
+            FROM images
+            WHERE id < $1
+            ORDER BY id DESC
+            LIMIT 1
+        ) as previous_id, (
+            SELECT id
+            FROM images
+            WHERE id > $1
+            LIMIT 1
+        ) as next_id
+        FROM images
         WHERE id = $1`,
-        [id]
-    )
-}
+    [imageid]
+  );
+};
 
-// GET COMMENTS
-module.exports.getComments = (id) => {
-    return db.query(`
-        SELECT * FROM comments 
-        WHERE image_id = $1
-        ORDER BY id DESC`,
-        [id]
-    )
-}
+module.exports.getComments = function(imageid) {
+  return db.query(
+    `SELECT username, comment, created_at
+        FROM comments
+        WHERE image_id = $1`,
+    [imageid]
+  );
+};
 
-// ADD COMMENT
-module.exports.addComment = (username, comment, imageID) => {
-    return db.query(`
-        INSERT INTO comments (username, comment, image_id)
-        VALUES ($1, $2, $3)
-        RETURNING *`,
-        [username, comment, imageID]
-    )
-}
+module.exports.addComment = function(username, comment, imageid) {
+  return db.query(
+    `INSERT INTO comments (username, comment, image_id)
+            VALUES ($1, $2, $3)
+            RETURNING *`,
+    [username, comment, imageid]
+  );
+};
