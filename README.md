@@ -14,3 +14,6 @@ This project is part of the Full-stack web development program at Spiced Academy
 * Homepage displaying all the images sorted by newest first.
 * Clicking on a image will trigger a modal containing the pic in larger size along with username, title and description. All the users are now allowed to post comments through the dedicated section.
 * Client-side JavaScript routing lets users navigate through the pictures.
+
+## Live project
+https://twin-peaks-imageboard.herokuapp.com/
