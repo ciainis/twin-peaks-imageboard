@@ -1,11 +1,9 @@
 const knox = require('knox');
 const fs = require('fs');
 
-let secrets = require('./secrets'); 
-
 const client = knox.createClient({
-  key: process.env.AWS_KEY || secrets.AWS_KEY,
-  secret: process.env.AWS_SECRET || secrets.AWS_SECRET,
+  key: process.env.AWS_KEY || require('./secrets').AWS_KEY,
+  secret: process.env.AWS_SECRET || require('./secrets').AWS_SECRET,
   bucket: 'espressocup'
 });
 
