@@ -1,9 +1,8 @@
 const spicedPg = require('spiced-pg');
 
-const { dbUser, dbPass } = require('./secrets');
 const db = spicedPg(
   process.env.DATABASE_URL ||
-    `postgres:${dbUser}:${dbPass}@localhost:5432/imageboard`
+    `postgres:${require('./secrets').dbUser}:${require('./secrets').dbPass}@localhost:5432/imageboard`
 );
 
 module.exports.getImages = function() {
